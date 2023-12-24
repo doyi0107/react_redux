@@ -1,13 +1,19 @@
 import './App.css';
 import React, {useState} from 'react';
+import {createStore} from 'reudx';
+
+const store = createStore();
 
 function App() {
   const [number,setNumber] = useState(1);
 
   return (
-    <div id='container'>
-      <h1>root</h1>
-        <Left1 doyi = {number}/>
+    <div id="container">
+      <h1>Root : {number}</h1>
+      <div id="gird">
+        <Left1 />
+        <Right1/>
+      </div>
     </div>
   );
 }
@@ -15,8 +21,8 @@ function App() {
 function Left1(props) {
   return (
     <div>
-      <h1>Left1 : {props.doyi}</h1>
-      <Left2 />
+      <h1>Left1 :</h1>
+      <Left2/>
     </div>
   );
 }
@@ -24,7 +30,7 @@ function Left1(props) {
 function Left2(props) {
   return (
     <div>
-      <h1>Left2</h1>
+      <h1>Left2 : </h1>
       <Left3 />
     </div>
   );
@@ -33,7 +39,35 @@ function Left2(props) {
 function Left3(props) {
   return (
     <div>
-      <h1>Left3</h1>
+      <h1>Left3 :</h1>
+    </div>
+  );
+}
+
+function Right1(props) {
+  return (
+    <div>
+      <h1>Right1</h1>
+      <Right2 />
+    </div>
+  );
+  
+}
+
+function Right2(props) {
+  return (
+    <div>
+      <h1>Right2</h1>
+      <Right3 />
+    </div>
+  );
+}
+
+function Right3(props) {
+  return (
+    <div>
+      <h1>Right3</h1>
+      <input type='button' value="+"></input>
     </div>
   );
 }
