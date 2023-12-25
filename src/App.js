@@ -1,18 +1,37 @@
 import './App.css';
 import React, {useState} from 'react';
-import {createStore} from 'reudx';
+import { createStore } from 'redux';
+import { Provider, useSelector, useDispatch} from 'react-redux';
+import { act } from 'react-dom/test-utils';
 
-const store = createStore();
+function reducer(currentState, action) {
+  if(currentState === undefined){
+    return{
+      number:1
+    };
+  }
+  // 과거의 state를 복제한다. 
+  const newState = {...currentState}
+  // 그렇게 복제한 객체를 수정하면 불변성을 유지할 수 있다. 
+  if(action.type === 'PLUS') {
+    newState.number++;
+  }
+  return newState;
+}
+
+const store = createStore(reducer);
 
 function App() {
-  const [number,setNumber] = useState(1);
 
   return (
     <div id="container">
-      <h1>Root : {number}</h1>
+      <h1>Root </h1>
       <div id="gird">
-        <Left1 />
-        <Right1/>
+        <Provider store={store}>
+          {/* 이젠 이 안에 있는 component는 store를 사용할 수 있다.  */}
+          <Left1 />
+          <Right1/>
+        </Provider>
       </div>
     </div>
   );
@@ -37,9 +56,10 @@ function Left2(props) {
 }
 
 function Left3(props) {
+  const number = useSelector( (state) => state.number);
   return (
     <div>
-      <h1>Left3 :</h1>
+      <h1>Left3 : {number}</h1>
     </div>
   );
 }
@@ -64,10 +84,11 @@ function Right2(props) {
 }
 
 function Right3(props) {
+  const dispatch = useDispatch();
   return (
     <div>
       <h1>Right3</h1>
-      <input type='button' value="+"></input>
+      <input type='button' value="+" onClick={() => {dispatch({ type: 'PLUS'})}}></input>
     </div>
   );
 }
