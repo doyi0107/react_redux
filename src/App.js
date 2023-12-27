@@ -1,104 +1,141 @@
-import './App.css';
-import React, {useState} from 'react';
-import { createStore } from 'redux';
-import { Provider, useSelector, useDispatch} from 'react-redux';
+// Calculator.js
+import React from "react";
+import { Provider, useSelector, useDispatch } from "react-redux";
+import { createStore } from "redux";
 
-function reducer(currentState, action) {
-  // reducer는 현재 state값과 어떻게 바꿀 것인지에 대한 action값 2개를 인자로 받는다. 
-  if(currentState === undefined){
-    return{
-      number:1
-    };
+// Reducer
+const calculatorReducer = (state = { result: 0, currentInput: "" }, action) => {
+  const newState = { ...state };
+
+  switch (action.type) {
+    case "choose":
+       if (state.currentInput !== "" && state.currentInput == NaN) {  }
+    case "ADD":
+        newState.result = state.result + parseFloat(state.currentInput);
+        newState.currentInput = "";
+      
+      break;
+    case "SUBTRACT":
+      newState.result = state.result - parseFloat(state.currentInput);
+      newState.currentInput = "";
+      break;
+    case "MULTIPLY":
+      newState.result = state.result * parseFloat(state.currentInput);
+      newState.currentInput = "";
+      break;
+    case "DIVIDE":
+      newState.result = state.result / parseFloat(state.currentInput);
+      newState.currentInput = "";
+      break;
+    case "CLEAR":
+      newState.result = 0;
+      newState.currentInput = "";
+      break;
+    case "UPDATE_CURRENT_INPUT":
+      newState.currentInput += action.payload;
+      break;
+    default:
+      break;
   }
-  // 과거의 state를 복제한다. 
-  const newState = {...currentState}
-  // 그렇게 복제한 객체를 수정하면 불변성을 유지할 수 있다. 
 
-  if(action.type === 'PLUS') {
-    newState.number++;
-  }
-
-  // return한 값이 새로운 state값이 된다. 
   return newState;
-}
+};
 
-const storei = createStore(reducer);
-// createStore 는 전역 상태(state) 를 가지고 있는 store 객체를 생성하는 함수이다. 
-// 그리고 store 는 getState, subscribe, dispatch API 를 제공한다.
+// Action creators
+const 숫자선택 = () => ({ type: "choose" });
+const add = () => ({ type: "ADD" });
+const subtract = () => ({ type: "SUBTRACT" });
+const multiply = () => ({ type: "MULTIPLY" });
+const divide = () => ({ type: "DIVIDE" });
+const clear = () => ({ type: "CLEAR" });
+const updateCurrentInput = (value) => ({
+  type: "UPDATE_CURRENT_INPUT",
+  payload: value,
+});
 
-function App() {
+// Calculator component
+function Calculator() {
+  const result = useSelector((state) => state.result);
+  const currentInput = useSelector((state) => state.currentInput);
+  const dispatch = useDispatch();
+
+  const handleNumberClick = (value) => {
+    dispatch(updateCurrentInput(value.toString()));
+  };
+
+  const handleOperationClick = (operation) => {
+    switch (operation) {
+      case "✔️":
+        dispatch(숫자선택());
+        break;
+      case "+":
+        dispatch(add());
+        break;
+      case "-":
+        dispatch(subtract());
+        break;
+      case "*":
+        dispatch(multiply());
+        break;
+      case "/":
+        dispatch(divide());
+        break;
+      case "clear":
+        dispatch(clear());
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleClearClick = () => {
+    dispatch(clear());
+  };
 
   return (
-    <div id="container">
-      <h1>Root </h1>
-      <div id="gird">
-        <Provider store={storei}>
-          {/* 이젠 이 안에 있는 component는 store를 사용할 수 있다.  */}
-          <Left1 />
-          <Right1/>
-        </Provider>
+    <div>
+      <h1>Calculator</h1>
+      <div>
+        <p>Result: {result}</p>
+        <p>Current Input: {currentInput}</p>
+      </div>
+      <div>
+        {/* Number buttons */}
+        <button onClick={() => handleNumberClick(1)}>1</button>
+        <button onClick={() => handleNumberClick(2)}>2</button>
+        <button onClick={() => handleNumberClick(3)}>3</button>
+        <button onClick={() => handleNumberClick(4)}>4</button>
+        <button onClick={() => handleNumberClick(5)}>5</button>
+        <button onClick={() => handleNumberClick(6)}>6</button>
+        <button onClick={() => handleNumberClick(7)}>7</button>
+        <button onClick={() => handleNumberClick(8)}>8</button>
+        <button onClick={() => handleNumberClick(9)}>9</button>
+        <button onClick={() => handleNumberClick(0)}>0</button>
+
+        {/* Operation buttons */}
+        <button onClick={() => handleOperationClick("+")}>+</button>
+        <button onClick={() => handleOperationClick("-")}>-</button>
+        <button onClick={() => handleOperationClick("*")}>*</button>
+        <button onClick={() => handleOperationClick("/")}>/</button>
+        <button onClick={() => handleOperationClick("*")}>*</button>
+        <button onClick={() => handleOperationClick("✔️")}>✔️</button>
+
+        {/* Clear button */}
+        <button onClick={handleClearClick}>C</button>
       </div>
     </div>
   );
 }
 
-function Left1(props) {
+const store = createStore(calculatorReducer);
+
+// App component (unchanged from previous example)
+export default function App() {
   return (
     <div>
-      <h1>Left1 :</h1>
-      <Left2/>
+      <Provider store={store}>
+        <Calculator />
+      </Provider>
     </div>
   );
 }
-
-function Left2(props) {
-  return (
-    <div>
-      <h1>Left2 : </h1>
-      <Left3 />
-    </div>
-  );
-}
-
-function Left3(props) {
-  // useSelector()는 함수를 인자값으로 받는다. 
-  const number = useSelector( (state) => state.number);
-  return (
-    <div>
-      {/* prop사용하지 않고 무선으로 연결한 형태이다. */}
-      <h1>Left3 : {number}</h1>
-    </div>
-  );
-}
-
-function Right1(props) {
-  return (
-    <div>
-      <h1>Right1</h1>
-      <Right2 />
-    </div>
-  );
-  
-}
-
-function Right2(props) {
-  return (
-    <div>
-      <h1>Right2</h1>
-      <Right3 />
-    </div>
-  );
-}
-
-function Right3(props) {
-  const dispatch = useDispatch();
-  return (
-    <div>
-      <h1>Right3</h1>
-      {/* plus라고 하는 action을 전달한다. */}
-      <input type='button' value="+" onClick={() => {dispatch({ type: 'PLUS'})}}></input>
-    </div>
-  );
-}
-
-export default App;
