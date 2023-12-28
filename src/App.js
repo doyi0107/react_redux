@@ -1,141 +1,137 @@
-// Calculator.js
+// calculatorApp.js
 import React from "react";
-import { Provider, useSelector, useDispatch } from "react-redux";
 import { createStore } from "redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
+
+// Actions
+const ADD_NUMBER = "ADD_NUMBER";
+const ADD_OPERATOR = "ADD_OPERATOR";
+const CALCULATE_RESULT = "CALCULATE_RESULT";
+const CLEAR_DISPLAY = "CLEAR_DISPLAY";
+
+const addNumber = (number) => ({ type: ADD_NUMBER, payload: { number } });
+const addOperator = (operator) => ({
+  type: ADD_OPERATOR,
+  payload: { operator },
+});
+const calculateResult = () => ({ type: CALCULATE_RESULT });
+const clearDisplay = () => ({ type: CLEAR_DISPLAY });
 
 // Reducer
-const calculatorReducer = (state = { result: 0, currentInput: "" }, action) => {
-  const newState = { ...state };
-
+const calculatorReducer = (
+  state = { displayValue: "", operator: null, prevValue: null },
+  action
+) => {
   switch (action.type) {
-    case "choose":
-       if (state.currentInput !== "" && state.currentInput == NaN) {  }
-    case "ADD":
-        newState.result = state.result + parseFloat(state.currentInput);
-        newState.currentInput = "";
+    case ADD_NUMBER:
+      return {
+        ...state,
+        displayValue:
+          state.displayValue === ""
+            ? action.payload.number
+            : state.displayValue + action.payload.number,
+      };
+    case ADD_OPERATOR:
+      return {
+        ...state,
+        operator: action.payload.operator,
+        prevValue: state.displayValue,
+        displayValue: "0",
+      };
       
-      break;
-    case "SUBTRACT":
-      newState.result = state.result - parseFloat(state.currentInput);
-      newState.currentInput = "";
-      break;
-    case "MULTIPLY":
-      newState.result = state.result * parseFloat(state.currentInput);
-      newState.currentInput = "";
-      break;
-    case "DIVIDE":
-      newState.result = state.result / parseFloat(state.currentInput);
-      newState.currentInput = "";
-      break;
-    case "CLEAR":
-      newState.result = 0;
-      newState.currentInput = "";
-      break;
-    case "UPDATE_CURRENT_INPUT":
-      newState.currentInput += action.payload;
-      break;
-    default:
-      break;
-  }
+    case CALCULATE_RESULT:
+      const prev = parseFloat(state.prevValue);
+      const current = parseFloat(state.displayValue);
+      let result;
 
-  return newState;
+      switch (state.operator) {
+        case "+":
+          result = prev + current;
+          break;
+        case "-":
+          result = prev - current;
+          break;
+        case "×":
+          result = prev * current;
+          break;
+        case "÷":
+          result = prev / current;
+          break;
+        case "%":
+          result = (prev / 100) * current;
+          break;
+        default:
+          result = current;
+      }
+
+      return {
+        ...state,
+        displayValue: result.toString(),
+        operator: null,
+        prevValue: null,
+      };
+    case CLEAR_DISPLAY:
+      return {
+        displayValue: "",
+        operator: null,
+        prevValue: null,
+      };
+    default:
+      return state;
+  }
 };
 
-// Action creators
-const 숫자선택 = () => ({ type: "choose" });
-const add = () => ({ type: "ADD" });
-const subtract = () => ({ type: "SUBTRACT" });
-const multiply = () => ({ type: "MULTIPLY" });
-const divide = () => ({ type: "DIVIDE" });
-const clear = () => ({ type: "CLEAR" });
-const updateCurrentInput = (value) => ({
-  type: "UPDATE_CURRENT_INPUT",
-  payload: value,
-});
+// Store
+const store = createStore(calculatorReducer);
 
-// Calculator component
-function Calculator() {
-  const result = useSelector((state) => state.result);
-  const currentInput = useSelector((state) => state.currentInput);
+// App Component
+const App = () => {
+  const displayValue = useSelector((state) => state.displayValue);
   const dispatch = useDispatch();
 
-  const handleNumberClick = (value) => {
-    dispatch(updateCurrentInput(value.toString()));
+  const handleNumberClick = (number) => {
+    dispatch(addNumber(number));
   };
 
-  const handleOperationClick = (operation) => {
-    switch (operation) {
-      case "✔️":
-        dispatch(숫자선택());
-        break;
-      case "+":
-        dispatch(add());
-        break;
-      case "-":
-        dispatch(subtract());
-        break;
-      case "*":
-        dispatch(multiply());
-        break;
-      case "/":
-        dispatch(divide());
-        break;
-      case "clear":
-        dispatch(clear());
-        break;
-      default:
-        break;
-    }
+  const handleOperatorClick = (operator) => {
+    dispatch(addOperator(operator));
+  };
+
+  const handleEqualClick = () => {
+    dispatch(calculateResult());
   };
 
   const handleClearClick = () => {
-    dispatch(clear());
+    dispatch(clearDisplay());
   };
 
   return (
     <div>
-      <h1>Calculator</h1>
-      <div>
-        <p>Result: {result}</p>
-        <p>Current Input: {currentInput}</p>
-      </div>
-      <div>
-        {/* Number buttons */}
-        <button onClick={() => handleNumberClick(1)}>1</button>
-        <button onClick={() => handleNumberClick(2)}>2</button>
-        <button onClick={() => handleNumberClick(3)}>3</button>
-        <button onClick={() => handleNumberClick(4)}>4</button>
-        <button onClick={() => handleNumberClick(5)}>5</button>
-        <button onClick={() => handleNumberClick(6)}>6</button>
-        <button onClick={() => handleNumberClick(7)}>7</button>
-        <button onClick={() => handleNumberClick(8)}>8</button>
-        <button onClick={() => handleNumberClick(9)}>9</button>
-        <button onClick={() => handleNumberClick(0)}>0</button>
-
-        {/* Operation buttons */}
-        <button onClick={() => handleOperationClick("+")}>+</button>
-        <button onClick={() => handleOperationClick("-")}>-</button>
-        <button onClick={() => handleOperationClick("*")}>*</button>
-        <button onClick={() => handleOperationClick("/")}>/</button>
-        <button onClick={() => handleOperationClick("*")}>*</button>
-        <button onClick={() => handleOperationClick("✔️")}>✔️</button>
-
-        {/* Clear button */}
-        <button onClick={handleClearClick}>C</button>
-      </div>
+      <div>Display: {displayValue}</div>
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
+        <button
+          key={number}
+          onClick={() => handleNumberClick(number.toString())}
+        >
+          {number}
+        </button>
+      ))}
+      {["+", "-", "×", "÷", "%"].map((operator) => (
+        <button key={operator} onClick={() => handleOperatorClick(operator)}>
+          {operator}
+        </button>
+      ))}
+      <button onClick={handleEqualClick}>=</button>
+      <button onClick={handleClearClick}>Clear</button>
     </div>
   );
-}
+};
 
-const store = createStore(calculatorReducer);
+// Render
+const CalculatorApp = () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
 
-// App component (unchanged from previous example)
-export default function App() {
-  return (
-    <div>
-      <Provider store={store}>
-        <Calculator />
-      </Provider>
-    </div>
-  );
-}
+export default CalculatorApp;
