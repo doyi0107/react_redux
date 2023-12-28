@@ -2,12 +2,13 @@
 import React from "react";
 import { createStore } from "redux";
 import { Provider, useDispatch, useSelector } from "react-redux";
+import calculatorReducer from "./reducer"; 
 
 // Actions
-const ADD_NUMBER = "ADD_NUMBER";
-const ADD_OPERATOR = "ADD_OPERATOR";
-const CALCULATE_RESULT = "CALCULATE_RESULT";
-const CLEAR_DISPLAY = "CLEAR_DISPLAY";
+export const ADD_NUMBER = "ADD_NUMBER";
+export const ADD_OPERATOR = "ADD_OPERATOR";
+export const CALCULATE_RESULT = "CALCULATE_RESULT";
+export const CLEAR_DISPLAY = "CLEAR_DISPLAY";
 
 const addNumber = (number) => ({ type: ADD_NUMBER, payload: { number } });
 const addOperator = (operator) => ({
@@ -17,69 +18,7 @@ const addOperator = (operator) => ({
 const calculateResult = () => ({ type: CALCULATE_RESULT });
 const clearDisplay = () => ({ type: CLEAR_DISPLAY });
 
-// Reducer
-const calculatorReducer = (
-  state = { displayValue: "", operator: null, prevValue: null },
-  action
-) => {
-  switch (action.type) {
-    case ADD_NUMBER:
-      return {
-        ...state,
-        displayValue:
-          state.displayValue === ""
-            ? action.payload.number
-            : state.displayValue + action.payload.number,
-      };
-    case ADD_OPERATOR:
-      return {
-        ...state,
-        operator: action.payload.operator,
-        prevValue: state.displayValue,
-        displayValue: "0",
-      };
-      
-    case CALCULATE_RESULT:
-      const prev = parseFloat(state.prevValue);
-      const current = parseFloat(state.displayValue);
-      let result;
 
-      switch (state.operator) {
-        case "+":
-          result = prev + current;
-          break;
-        case "-":
-          result = prev - current;
-          break;
-        case "×":
-          result = prev * current;
-          break;
-        case "÷":
-          result = prev / current;
-          break;
-        case "%":
-          result = (prev / 100) * current;
-          break;
-        default:
-          result = current;
-      }
-
-      return {
-        ...state,
-        displayValue: result.toString(),
-        operator: null,
-        prevValue: null,
-      };
-    case CLEAR_DISPLAY:
-      return {
-        displayValue: "",
-        operator: null,
-        prevValue: null,
-      };
-    default:
-      return state;
-  }
-};
 
 // Store
 const store = createStore(calculatorReducer);
@@ -131,6 +70,7 @@ const App = () => {
 const CalculatorApp = () => (
   <Provider store={store}>
     <App />
+    <p className="text-blue-500 text-xl font-bold">tailwindcss 테스트하고 있습니다.</p>
   </Provider>
 );
 
