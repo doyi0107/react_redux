@@ -3,6 +3,7 @@ import React from "react";
 import { createStore } from "redux";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import calculatorReducer from "./reducer"; 
+import "./App.css"
 
 // Actions
 export const ADD_NUMBER = "ADD_NUMBER";
@@ -44,24 +45,48 @@ const App = () => {
     dispatch(clearDisplay());
   };
 
+  // class="bg-[#50d71e] w-60 size-full"
+// class="mx-8 ..." 
   return (
-    <div>
-      <div>Display: {displayValue}</div>
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
+    <div
+      id="wrap"
+      class="h-200px w-full mx-auto grid justify-center items-center"
+    >
+      <div id="center" class="w-10vw">
+        <div class="grid justify-center my-8 text-4xl">
+          Display: {displayValue}
+        </div>
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
+          <button
+            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            key={number}
+            onClick={() => handleNumberClick(number.toString())}
+          >
+            {number}
+          </button>
+        ))}
+        {["+", "-", "×", "÷", "%"].map((operator) => (
+          <button
+            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            key={operator}
+            onClick={() => handleOperatorClick(operator)}
+          >
+            {operator}
+          </button>
+        ))}
         <button
-          key={number}
-          onClick={() => handleNumberClick(number.toString())}
+          class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+          onClick={handleEqualClick}
         >
-          {number}
+          =
         </button>
-      ))}
-      {["+", "-", "×", "÷", "%"].map((operator) => (
-        <button key={operator} onClick={() => handleOperatorClick(operator)}>
-          {operator}
+        <button
+          class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+          onClick={handleClearClick}
+        >
+          C
         </button>
-      ))}
-      <button onClick={handleEqualClick}>=</button>
-      <button onClick={handleClearClick}>Clear</button>
+      </div>
     </div>
   );
 };
@@ -70,7 +95,6 @@ const App = () => {
 const CalculatorApp = () => (
   <Provider store={store}>
     <App />
-    <p className="text-blue-500 text-xl font-bold">tailwindcss 테스트하고 있습니다.</p>
   </Provider>
 );
 

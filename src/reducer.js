@@ -13,17 +13,18 @@ const calculatorReducer = (
     case ADD_NUMBER:
       return {
         ...state,
-        displayValue:
-          state.displayValue === ""
-            ? action.payload.number
-            : state.displayValue + action.payload.number,
+        displayValue: state.displayValue === "" ? action.payload.number : 
+         state.displayValue + action.payload.number,
       };
+
+      // 연산자를 눌렀을 때 수행됨
     case ADD_OPERATOR:
       return {
         ...state,
         operator: action.payload.operator,
-        prevValue: state.displayValue,
-        displayValue: "0",
+        // 처음 누른 값
+        prevValue: state.displayValue ,
+        displayValue: "",
       };
 
     case CALCULATE_RESULT:

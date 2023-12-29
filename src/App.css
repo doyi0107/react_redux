@@ -1,20 +1,17 @@
-@import "tailwindcss/base";
+/* @import "tailwindcss/base";
 @import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
-#container, #container> div div {
-   border: 5px solid red;
-   margin: 5px;
+@import "tailwindcss/utilities"; */
+/* 
+#wrap{
+  height: 200px;
+  width: 100%;
+  margin: 0 auto;
+      justify-content: center;
+        text-align: center;
+        display: grid;
 }
 
-#gird{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
+#center{
 
-input{
-  width: 100px;
-  height: 50px;
-}
-
+} */
 
