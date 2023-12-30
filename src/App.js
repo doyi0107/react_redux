@@ -50,42 +50,47 @@ const App = () => {
   return (
     <div
       id="wrap"
-      class="h-200px w-full mx-auto grid justify-center items-center"
+      class=" mx-auto grid justify-center items-center flex h-screen "
     >
-      <div id="center" class="w-10vw">
-        <div class="grid justify-center my-8 text-4xl">
+      <div
+        id="center"
+        class="h-200px w-300 border border-solid border-yellow-500"
+      >
+        <div class="grid justify-center my-2 text-3xl">
           Display: {displayValue}
         </div>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
+        <div class="w-48 h-48" id="button_wrap">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
+            <button
+              class="w-15 h-15 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              key={number}
+              onClick={() => handleNumberClick(number.toString())}
+            >
+              {number}
+            </button>
+          ))}
+          {["+", "-", "×", "÷", "%"].map((operator) => (
+            <button
+              class="w-15 h-15 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              key={operator}
+              onClick={() => handleOperatorClick(operator)}
+            >
+              {operator}
+            </button>
+          ))}
           <button
-            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-            key={number}
-            onClick={() => handleNumberClick(number.toString())}
+            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-15 h-15"
+            onClick={handleEqualClick}
           >
-            {number}
+            =
           </button>
-        ))}
-        {["+", "-", "×", "÷", "%"].map((operator) => (
           <button
-            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-            key={operator}
-            onClick={() => handleOperatorClick(operator)}
+            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-15 h-15"
+            onClick={handleClearClick}
           >
-            {operator}
+            C
           </button>
-        ))}
-        <button
-          class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-          onClick={handleEqualClick}
-        >
-          =
-        </button>
-        <button
-          class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-          onClick={handleClearClick}
-        >
-          C
-        </button>
+        </div>
       </div>
     </div>
   );
