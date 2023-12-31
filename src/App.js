@@ -3,6 +3,8 @@ import React from "react";
 import { createStore } from "redux";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import calculatorReducer from "./reducer"; 
+import Recoil from "./recoil";
+import { RecoilRoot } from "recoil";
 import "./App.css"
 
 // Actions
@@ -71,7 +73,7 @@ const App = () => {
           ))}
           {["+", "-", "×", "÷", "%"].map((operator) => (
             <button
-              class="w-15 h-15 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              class="w-13 h-15 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
               key={operator}
               onClick={() => handleOperatorClick(operator)}
             >
@@ -79,19 +81,23 @@ const App = () => {
             </button>
           ))}
           <button
-            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-15 h-15"
+            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-12 h-15"
             onClick={handleEqualClick}
           >
             =
           </button>
           <button
-            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-15 h-15"
+            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-13 h-15"
             onClick={handleClearClick}
           >
             C
           </button>
         </div>
       </div>
+
+      <RecoilRoot>
+        <Recoil />
+      </RecoilRoot>
     </div>
   );
 };
@@ -100,6 +106,7 @@ const App = () => {
 const CalculatorApp = () => (
   <Provider store={store}>
     <App />
+
   </Provider>
 );
 
