@@ -56,12 +56,12 @@ const App = () => {
     >
       <div
         id="center"
-        class="h-200px w-300 border border-solid border-yellow-500"
+        class="h-200px w-300"
       >
-        <div class="grid justify-center my-2 text-3xl">
+        <div class="grid justify-center m-8 text-3xl">
           Display: {displayValue}
         </div>
-        <div class="w-48 h-48" id="button_wrap">
+        <div class="" id="button_wrap">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
             <button
               class="w-15 h-15 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
@@ -73,7 +73,7 @@ const App = () => {
           ))}
           {["+", "-", "×", "÷", "%"].map((operator) => (
             <button
-              class="w-13 h-15 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+              class="w-15 h-15 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
               key={operator}
               onClick={() => handleOperatorClick(operator)}
             >
@@ -81,7 +81,7 @@ const App = () => {
             </button>
           ))}
           <button
-            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-12 h-15"
+            class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded w-15 h-15"
             onClick={handleEqualClick}
           >
             =
